@@ -121,7 +121,7 @@ void DirectX11::Shutdown() {
 }
 
 void DirectX11::CustomStyle() {
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO& io = ImGui::GetIO();
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
     io.FontGlobalScale = 1.f;
