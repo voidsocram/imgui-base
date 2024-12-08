@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+.vs
 
 # Compiled Object files
 *.slo
@@ -30,3 +31,7 @@
 *.exe
 *.out
 *.app
+
+# Releases
+x64
+x86
