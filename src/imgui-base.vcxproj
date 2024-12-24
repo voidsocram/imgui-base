@@ -140,6 +140,7 @@
     <ClCompile Include="include\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="include\imgui\imgui_tables.cpp" />
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Keybinds\Keybind.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +155,7 @@
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="include\json.hpp" />
+    <ClInclude Include="Keybinds\Keybind.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="tabs\MainTab.h" />
     <ClInclude Include="tabs\SettingsTab.h" />

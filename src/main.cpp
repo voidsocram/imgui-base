@@ -1,6 +1,7 @@
 #include "DirectX11.h"
 #include "Config.h"
 #include "resource.h"
+#include "Keybinds/Keybind.h"
 
 DirectX11 DX11;
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -62,6 +63,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPWSTR /*l
 
         // Start the Dear ImGui frame
         DX11.NewFrame();
+
+        //Check for keys pressed
+        Keybind::UpdateAll();
         
         //Render menu
         DX11.Render();
