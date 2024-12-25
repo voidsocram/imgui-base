@@ -14,16 +14,16 @@ enum class KeyMode {
 
 class Keybind {
 public:
-    Keybind(ImGuiKey inputKey, KeyMode mode, std::function<void()> action = nullptr);
+    Keybind(int inputKey, KeyMode mode, std::function<void()> action = nullptr);
     ~Keybind();
 
     void Update();
     [[nodiscard]] bool IsActive() const;
     [[nodiscard]] std::string KeyName() const; 
-    [[nodiscard]] ImGuiKey GetKey() const { return key; } 
+    [[nodiscard]] int GetKey() const { return key; } 
     [[nodiscard]] KeyMode GetMode() const { return mode; }
 
-    void SetKey(ImGuiKey newKey);
+    void SetKey(int newKey);
     void SetMode(KeyMode newMode);
     void SetAction(std::function<void()> newAction);
 
@@ -33,12 +33,13 @@ public:
     static void ClearAll();
 
 private:
-    ImGuiKey key;
+    int key;
     KeyMode mode;
     bool isEnabled;
     bool prevKeyState;
     bool isSelectingKey; 
     std::function<void()> action;
 
+    static const std::unordered_map<int, std::string> VK_TO_STRING;
     static std::vector<Keybind*> keybinds;
 };
