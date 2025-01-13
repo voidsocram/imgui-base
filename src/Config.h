@@ -1,60 +1,63 @@
 #pragma once
-#include "json.hpp"
 #include <windows.h>
 #include <fstream>
 #include <filesystem>
+#include "json.hpp"
 
-using json = nlohmann::json;
+struct Settings {
+	std::string settingsFile = "Config.json";
+	std::wstring title = L"DirectX11 Imgui Base";
+	int width = 730;
+	int height = 335;
+	std::string exampleValue = "Hello";
+};
 
-namespace Settings {
-	// Global HWND (window handle)
-	inline HWND hwnd;
-
-	inline constexpr const char* SettingsFile = "Config.json";
-	inline std::string defaultValue;
-
-	namespace Window {
-		inline const std::wstring Title = L"DirectX11 Imgui Base";
-		inline int Width = 730;
-		inline int Height = 335;
-	}
-}
+//Define values to store on settingsFile here
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Settings, exampleValue)
 
 class Config {
 public:
-
+	static inline Settings settings{};
 	static void Save() {
-		std::ifstream iFile(Settings::SettingsFile);
-		if (iFile.good()) {
-			json data = json::parse(iFile);
-			data["defaultValue"] = Settings::defaultValue;
+		try {
+			nlohmann::json j = settings;
 
-			std::ofstream oFile(Settings::SettingsFile);
-			oFile << data.dump(4) << std::endl;
-			oFile.close();
+			std::ofstream file(settings.settingsFile);
+			if (!file.is_open()) {
+				throw std::runtime_error("Could not open settings file for writing");
+			}
+
+			file << std::setw(4) << j;
+		} catch (const std::exception& e) {
+			OutputDebugStringA(("Failed to save settings: " + std::string(e.what()) + "\n").c_str());
 		}
-		iFile.close();
 	}
 
 	static void Load() {
-		// if file doesn't exist, create new one
-		if (!std::filesystem::exists(Settings::SettingsFile)) {
+		try {
+			if (!std::filesystem::exists(settings.settingsFile)) {
+				Save();
+				return;
+			}
 
-			nlohmann::json defaultSettings = {
-				{"defaultValue", ""},
-			};
+			std::ifstream file(settings.settingsFile);
+			if (!file.is_open()) {
+				throw std::runtime_error("Could not open settings file for reading");
+			}
 
-			std::ofstream file(Settings::SettingsFile);
-			file << defaultSettings.dump(4);
-			file.close();
+			nlohmann::json j = nlohmann::json::parse(file);
+			settings = j.get<Settings>();
+		} catch (const std::exception& e) {
+			OutputDebugStringA(("Failed to load settings: " + std::string(e.what()) + "\n").c_str());
+		}
+	}
+
+	static void openConfigFile() {
+		if (!std::filesystem::exists(settings.settingsFile)) {
+			Save();
+			return;
 		}
 
-		std::fstream file(Settings::SettingsFile, std::ios_base::in);
-		if (file.good()) {
-			json data = json::parse(file);
-
-			if (data.contains("defaultValue")) Settings::defaultValue = data["defaultValue"];
-		}
-		file.close();
+		ShellExecuteA(NULL, "open", settings.settingsFile.c_str(), NULL, NULL, SW_SHOWDEFAULT);
 	}
 };
