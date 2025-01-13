@@ -1,5 +1,7 @@
 #pragma once
 #include "imgui.h"
+#include "Config.h"
+#include "Logger.h"
 
 class SettingsTab {
 public:
@@ -8,7 +10,11 @@ public:
         if (ImGui::BeginTabItem("Settings")) {
 
             if (ImGui::Button("Open Config File")) {
-                ShellExecuteA(NULL, "open", Settings::SettingsFile, NULL, NULL, SW_SHOWDEFAULT);
+                Config::openConfigFile();
+            }    
+            
+            if (ImGui::Button("Toggle Console")) {
+                Logger::ToggleConsole();
             }
 
             ImGui::EndTabItem();

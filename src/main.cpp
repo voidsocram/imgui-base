@@ -1,24 +1,28 @@
 #include "DirectX11.h"
 #include "Config.h"
 #include "resource.h"
-#include "Keybinds/Keybind.h"
+#include "Keybind.h"
+#include "Logger.h"
 
 DirectX11 DX11;
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPWSTR /*lpCmdLine*/, int /*nCmdShow*/) {
+    Logger::AttachConsole();
+    Logger::Init();
+
     Config::Load();
 
-    WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), LoadIcon(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_ICON1)), nullptr, nullptr, nullptr, Settings::Window::Title.c_str(), nullptr };
+    WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), LoadIcon(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_ICON1)), nullptr, nullptr, nullptr, Config::settings.title.c_str(), nullptr};
     ::RegisterClassExW(&wc);
 
     // Get the screen width and height
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-    int xPos = (screenWidth - Settings::Window::Width) / 2;
-    int yPos = (screenHeight - Settings::Window::Height) / 2;
+    int xPos = (screenWidth - Config::settings.width) / 2;
+    int yPos = (screenHeight - Config::settings.height) / 2;
 
-    HWND hwnd = ::CreateWindowW(wc.lpszClassName, Settings::Window::Title.c_str(), WS_OVERLAPPEDWINDOW, xPos, yPos, Settings::Window::Width, Settings::Window::Height, nullptr, nullptr, wc.hInstance, nullptr);
+    HWND hwnd = ::CreateWindowW(wc.lpszClassName, Config::settings.title.c_str(), WS_OVERLAPPEDWINDOW, xPos, yPos, Config::settings.width, Config::settings.height, nullptr, nullptr, wc.hInstance, nullptr);
 
     // Initialize Direct3D
     if (!DX11.CreateDeviceD3D(hwnd)) {
@@ -56,8 +60,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPWSTR /*l
 
             RECT rect;
             if (GetWindowRect(hwnd, &rect)) {
-                Settings::Window::Height = rect.bottom - rect.top;
-                Settings::Window::Width = rect.right - rect.left;
+                Config::settings.height = rect.bottom - rect.top;
+                Config::settings.width = rect.right - rect.left;
             }
         }
 

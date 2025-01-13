@@ -1,6 +1,7 @@
 #pragma once
 #include "imgui.h"
-#include "Keybinds/Keybind.h"
+#include "Keybind.h"
+#include "Logger.h"
 
 class MainTab {
 public:
@@ -12,19 +13,19 @@ public:
 			static Keybind toggleKey('T', KeyMode::TOGGLE, nullptr);
 			static Keybind holdKey('E', KeyMode::HOLD, nullptr);
 			static Keybind onceKey('J', KeyMode::ONCE, []() {
-				ShellExecuteA(NULL, "open", Settings::SettingsFile, NULL, NULL, SW_SHOWDEFAULT);
+				Logger::INFO("oncekey func executed !");
 			});
 
 			if (toggleKey.RenderKeySelector("Toggle Key")) {
-				std::cout << "Key changed to: " << toggleKey.KeyName() << std::endl;
+				Logger::INFO("Key changed to: {}", toggleKey.KeyName());
 			}
 
 			if (holdKey.RenderKeySelector("Hold Key")) {
-				std::cout << "Key changed to: " << holdKey.KeyName() << std::endl;
+				Logger::INFO("Key changed to: {}", holdKey.KeyName());
 			}
 
 			if (onceKey.RenderKeySelector("Once Key")) {
-				std::cout << "Key changed to: " << onceKey.KeyName() << std::endl;
+				Logger::INFO("Key changed to: {}", onceKey.KeyName());
 			}
 
 			ImGui::Text("Current state: %s", toggleKey.IsActive() ? "Active" : "Inactive");

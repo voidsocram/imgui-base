@@ -95,7 +95,7 @@ void DirectX11::EndFrame() {
 
 int DirectX11::Render() {
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(static_cast<float>(Settings::Window::Width - 15), static_cast<float>(Settings::Window::Height - 38)));
+    ImGui::SetNextWindowSize(ImVec2(static_cast<float>(Config::settings.width - 15), static_cast<float>(Config::settings.height - 38)));
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     ImGuiTabBarFlags tab_bar_flags = 0;
     ImGui::Begin("Title", nullptr, flags);
@@ -129,6 +129,7 @@ void DirectX11::CustomStyle() {
     ImGuiStyle* style = &ImGui::GetStyle();
 
     style->WindowPadding = ImVec2(15, 15);
+    style->WindowBorderSize = .0f;
     style->WindowRounding = .0f;
     style->FramePadding = ImVec2(5, 5);
     style->FrameRounding = 4.0f;
